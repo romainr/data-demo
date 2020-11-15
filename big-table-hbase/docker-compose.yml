@@ -1,0 +1,70 @@
+version: '2.1'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper:3.4.6
+    ports:
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka:2.12-2.2.1
+    ports:
+      - "9092:9092"
+      - "9094:9094"
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_ADVERTISED_LISTENERS=INSIDE://:9094,OUTSIDE://localhost:9092
+      - KAFKA_LISTENERS=INSIDE://:9094,OUTSIDE://:9092
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INSIDE
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CREATE_TOPICS="user_behavior:1:1"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  hbase-phoenix-all-in-one:
+    image: boostport/hbase-phoenix-all-in-one
+    container_name: hbase-phoenix
+    ports:
+      - "8765:8765"
+  kafka2phoenix:
+    image: romainr/kafka2phoenix:1.0
+    container_name: kafka2phoenix
+    depends_on:
+      - kafka
+      - hbase-phoenix-all-in-one
+  hue:
+    image: romainr/hue:demo-big-table-v1
+    hostname: hue
+    container_name: hue
+    ports:
+      - "8888:8888"
+    depends_on:
+      - hue-database
+    command: ["./wait-for-it.sh", "hue-database:3306", "--", "./startup.sh"]
+    links:
+      - fluentd
+    # Note: no dual logging in non enterprise edition
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: hue.logs
+  fluentd:
+    image: romainr/fluentd-1.11.5-plugins:1.0
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+  hue-database:
+    image: mysql:5.7
+    container_name: hue-database
+    ports:
+      - "33061:3306"
+    volumes:
+      - ./data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_USER: hue
+      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: hue
+volumes:
+  data:

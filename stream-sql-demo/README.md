@@ -1,3 +1,7 @@
+## Blog post
+
+[How to easily query live streams of data with Kafka and Flink SQL](https://medium.com/data-querying/how-to-easily-query-live-streams-of-data-with-kafka-and-flink-sql-7fa80731e9bd)
+
 ## One-line setup
 
 For fetching the configurations and starting everything:
