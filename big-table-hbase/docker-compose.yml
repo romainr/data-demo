@@ -32,7 +32,7 @@ services:
       - kafka
       - hbase-phoenix-all-in-one
   hue:
-    image: romainr/hue:demo-big-table-v1
+    image: romainr/hue:demo-big-table-v2
     hostname: hue
     container_name: hue
     ports:
