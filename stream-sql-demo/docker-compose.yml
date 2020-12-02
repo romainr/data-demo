@@ -80,7 +80,7 @@ services:
     entrypoint: /bin/sh
     tty: true
   hue:
-    image: romainr/hue:demo-streams-v2
+    image: romainr/hue:demo-streams-v3
     hostname: hue
     container_name: hue
     ports:
