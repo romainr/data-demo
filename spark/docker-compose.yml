@@ -1,0 +1,56 @@
+version: '2.1'
+services:
+
+  spark-sql:
+    image: fpin/docker-hive-spark
+    container_name: spark-sql
+    ports:
+      - "4040:4040"
+      - "9083:9083"
+      - "10000:10000"
+    entrypoint: ["./start.sh"]
+
+  spark-master:
+    image: bitnami/spark:2.4.6
+    container_name: spark-master
+    ports:
+      - "7077:7077"
+      - "8080:8080"
+
+  livy-spark:
+    image: cloudiator/livy-server:latest
+    container_name: livy-spark
+    ports:
+      - "8998:8998"
+    environment:
+      SPARK_MASTER_ENDPOINT: spark-master
+      SPARK_MASTER_PORT: 7077
+      DEPLOY_MODE: "client"
+    volumes:
+      - /tmp:/tmp
+
+  hue:
+    image: romainr/hue:spark-v1
+    hostname: hue
+    container_name: hue
+    ports:
+      - "8888:8888"
+    depends_on:
+      - hue-database
+    command: ["./wait-for-it.sh", "hue-database:3306", "--", "./startup.sh"]
+
+  hue-database:
+    image: mysql:5.7
+    container_name: hue-database
+    ports:
+      - "33061:3306"
+    volumes:
+      - ./data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_USER: hue
+      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: hue
+volumes:
+  data:
