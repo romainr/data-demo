@@ -15,3 +15,6 @@ Source of the [Data Querying](https://medium.com/data-querying) tutorials.
 
 - Query live data in a Big Table like HBase with Phoenix SQL
   - [Blog](https://medium.com/data-querying/phoenix-brings-sql-to-hbase-and-let-you-query-kafka-data-streams-8fd2edda1401) / [Repo](big-table-hbase)
+
+
+    pre-commit install
