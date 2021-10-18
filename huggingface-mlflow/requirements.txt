@@ -1,0 +1,4 @@
+mlflow[extras]==1.20.2
+transformers==4.11.3
+torch==1.9.1
+torch-scatter==2.0.8

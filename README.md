@@ -1,7 +1,10 @@
 Data Querying
 =============
 
-Source of the [Data Querying Blog](https://medium.com/data-querying) tutorials.
+Source of the [Data Querying](https://medium.com/data-querying) tutorials.
+
+
+- Serving a Transformer model converting Text to SQL with Huggingface and MLflow [blog]() / [repo]()
 
 - Query live data streams from Kafka with Flink SQL and ksqlDB
   - [Log Analysis](https://medium.com/data-querying/live-sql-querying-live-logs-and-sending-live-updates-easily-e6297150cf92) / [Repo](stream-sql-logs)
@@ -12,6 +15,3 @@ Source of the [Data Querying Blog](https://medium.com/data-querying) tutorials.
 
 - Query live data in a Big Table like HBase with Phoenix SQL
   - [Blog](https://medium.com/data-querying/phoenix-brings-sql-to-hbase-and-let-you-query-kafka-data-streams-8fd2edda1401) / [Repo](big-table-hbase)
-
-
-![Stream SQL Editor](https://cdn.gethue.com/uploads/2020/10/stream-editor.png)
